@@ -6,14 +6,16 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { Card, Text } from "react-native-paper";
 import { Drawer } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
+import { Appbar } from "react-native-paper";
+import { getHeaderTitle } from "@react-navigation/elements";
 
 const Home = ({ theme, navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const { user } = useUser();
-  const [active, setActive] = React.useState("first");
+
   console.log(navigation);
   const handleButtonClick = () => {
-    // Navigate to the new screen
+    // Navigate to the new screent
     navigation.navigate("Meow");
   };
 
@@ -21,16 +23,26 @@ const Home = ({ theme, navigation }) => {
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
+
         backgroundColor: theme.colors.background,
       }}
     >
+      <Appbar.Header>
+        <Appbar.Content title="My awesome app" />
+      </Appbar.Header>
       <Searchbar
         placeholder="Search"
         onChangeText={setSearchQuery}
         value={searchQuery}
+        style={{ margin: 10 }}
       />
 
+      <Card style={styles.container}>
+        <Card.Content>
+          <Text variant="titleLarge">Card title</Text>
+          <Text variant="bodyMedium">Card content</Text>
+        </Card.Content>
+      </Card>
       <Card style={styles.container}>
         <Card.Content>
           <Text variant="titleLarge">Card title</Text>
@@ -47,11 +59,11 @@ const Home = ({ theme, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginHorizontal: 10,
+    marginBottom: 5,
     justifyContent: "space-between",
     backgroundColor: "#fff",
-    padding: 20,
-    margin: 10,
+    padding: 10,
   },
   top: {
     flex: 0.3,

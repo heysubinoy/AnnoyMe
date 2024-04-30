@@ -3,27 +3,33 @@ import { Pressable } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { Slot, useRouter, useSegments } from "expo-router";
+
 import Meow from "./meow";
 import Profile from "./profile";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 import Home from "./home";
+import { withTheme } from "react-native-paper";
+export const LogoutButton = () => {
+  const { signOut } = useAuth();
 
+  const doLogout = () => {
+    signOut();
+  };
 
-const TabsPage = ({ navigation }) => {
-  const router = useRouter();
-  const { isSignedIn } = useAuth();
-  if (!isSignedIn) {
-    navigation.navigate("login");
-    return null;
-  }
+  return (
+    <Pressable onPress={doLogout} style={{ marginRight: 10 }}>
+      <Ionicons name="log-out-outline" size={24} color={"#fff"} />
+    </Pressable>
+  );
+};
+
+const TabsPage = ({ navigation, theme }) => {
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarHideOnKeyboard: true,
-
+        headerShown: false,
         tabBarStyle: {
           height: 70,
           borderWidth: 1,
@@ -47,13 +53,10 @@ const TabsPage = ({ navigation }) => {
       <Tab.Screen
         name="home"
         component={Home}
-        initialParams={{ navigation: navigation, hi: "hello" }}
         options={{
-          headerTitle: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
-          tabBarLabel: "Home",
         }}
       />
       <Tab.Screen

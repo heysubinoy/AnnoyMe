@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  View,
-  FlatList,
-  TextInput,
-  Button,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { View, FlatList, Button, StyleSheet, Text } from "react-native";
 import { Appbar } from "react-native-paper";
+import { TextInput } from "react-native-paper";
 import { Platform } from "react-native";
 
 const Meow = () => {
@@ -48,15 +42,18 @@ const Meow = () => {
         )}
         inverted // to display messages from bottom to top
       />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Type your message..."
-          value={newMessage}
-          onChangeText={setNewMessage}
-        />
-        <Button title="Send" onPress={handleSendMessage} />
-      </View>
+
+      <TextInput
+        multiline
+        mode="flat"
+        style={styles.input}
+        outlineColor="null"
+        underlineColor="null"
+        placeholder="Type your message..."
+        value={newMessage}
+        onChangeText={setNewMessage}
+        right={<TextInput.Icon icon="send" onPress={handleSendMessage} />}
+      />
     </View>
   );
 };
@@ -76,10 +73,10 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
   },
   messageText: {
-    fontSize: 16,
+    fontSize: 15,
   },
   timestamp: {
-    fontSize: 12,
+    fontSize: 15,
     color: "gray",
     marginTop: 5,
     alignSelf: "flex-end",
@@ -92,15 +89,19 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#cccccc",
     backgroundColor: "#ffffff",
+    overflow: "hidden",
   },
   input: {
-    flex: 1,
-    height: 40,
     borderWidth: 1,
+    marginHorizontal: 10,
+    marginBottom: 10,
     borderColor: "#cccccc",
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    marginRight: 10,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
+    overflow: "hidden",
+    borderBottom: 0,
   },
 });
 

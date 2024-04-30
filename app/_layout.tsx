@@ -4,10 +4,7 @@ import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import { useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 
-import {
-  PaperProvider,
-  MD3DarkTheme as DefaultTheme,
-} from "react-native-paper";
+import { PaperProvider, MD3DarkTheme } from "react-native-paper";
 
 const CLERK_PUBLISHABLE_KEY =
   "pk_test_ZGFybGluZy1wb2xsaXdvZy02MC5jbGVyay5hY2NvdW50cy5kZXYk";
@@ -52,7 +49,13 @@ const tokenCache = {
 };
 
 const RootLayout = () => {
-  const { theme } = useMaterial3Theme();
+  const theme = {
+    ...MD3DarkTheme, // or MD3DarkTheme
+    roundness: 2,
+    colors: {
+      ...MD3DarkTheme.colors,
+    },
+  };
   return (
     <PaperProvider theme={theme}>
       <ClerkProvider
