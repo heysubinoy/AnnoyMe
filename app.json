@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "annoyMe",
+    "slug": "annoyMe",
+    "plugins": ["expo-router"]
+  }
+}
