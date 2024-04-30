@@ -1,7 +1,13 @@
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { Slot, useRouter, useSegments } from "expo-router";
+import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import { useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
+
+import {
+  PaperProvider,
+  MD3DarkTheme as DefaultTheme,
+} from "react-native-paper";
 
 const CLERK_PUBLISHABLE_KEY =
   "pk_test_ZGFybGluZy1wb2xsaXdvZy02MC5jbGVyay5hY2NvdW50cy5kZXYk";
@@ -46,13 +52,16 @@ const tokenCache = {
 };
 
 const RootLayout = () => {
+  const { theme } = useMaterial3Theme();
   return (
-    <ClerkProvider
-      publishableKey={CLERK_PUBLISHABLE_KEY}
-      tokenCache={tokenCache}
-    >
-      <InitialLayout />
-    </ClerkProvider>
+    <PaperProvider theme={theme}>
+      <ClerkProvider
+        publishableKey={CLERK_PUBLISHABLE_KEY}
+        tokenCache={tokenCache}
+      >
+        <InitialLayout />
+      </ClerkProvider>
+    </PaperProvider>
   );
 };
 

@@ -1,36 +1,53 @@
-import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { Slot, useRouter, useSegments } from "expo-router";
+import Meow from "./meow";
+import Profile from "./profile";
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+import Home from "./home";
 
-export const LogoutButton = () => {
-  const { signOut } = useAuth();
 
-  const doLogout = () => {
-    signOut();
-  };
-
-  return (
-    <Pressable onPress={doLogout} style={{ marginRight: 10 }}>
-      <Ionicons name="log-out-outline" size={24} color={"#fff"} />
-    </Pressable>
-  );
-};
-
-const TabsPage = () => {
+const TabsPage = ({ navigation }) => {
+  const router = useRouter();
   const { isSignedIn } = useAuth();
-
+  if (!isSignedIn) {
+    navigation.navigate("login");
+    return null;
+  }
   return (
-    <Tabs
+    <Tab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#6c47ff",
+        tabBarHideOnKeyboard: true,
+
+        tabBarStyle: {
+          height: 70,
+          borderWidth: 1,
+          borderTopEndRadius: 20,
+          borderTopStartRadius: 20,
+          borderColor: "#000",
+          borderEndWidth: 2,
+          borderStartWidth: 2,
+          borderTopWidth: 2,
+          borderBottomWidth: 2,
+
+          opacity: 0.9,
         },
-        headerTintColor: "#fff",
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "bold",
+          marginBottom: 5,
+        },
       }}
     >
-      <Tabs.Screen
+      <Tab.Screen
         name="home"
+        component={Home}
+        initialParams={{ navigation: navigation, hi: "hello" }}
         options={{
           headerTitle: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -38,22 +55,23 @@ const TabsPage = () => {
           ),
           tabBarLabel: "Home",
         }}
-        redirect={!isSignedIn}
       />
-      <Tabs.Screen
+      <Tab.Screen
         name="profile"
+        component={Profile}
         options={{
-          headerTitle: "My Profile",
+          headerTitle: "Profile",
+
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
           tabBarLabel: "My Profile",
           headerRight: () => <LogoutButton />,
         }}
-        redirect={!isSignedIn}
       />
-      <Tabs.Screen
+      <Tab.Screen
         name="meow"
+        component={Meow}
         options={{
           headerTitle: "My Profile",
           tabBarIcon: ({ color, size }) => (
@@ -62,10 +80,18 @@ const TabsPage = () => {
           tabBarLabel: "My Profile",
           headerRight: () => <LogoutButton />,
         }}
-        redirect={!isSignedIn}
       />
-    </Tabs>
+    </Tab.Navigator>
   );
 };
 
-export default TabsPage;
+const StackPage = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={TabsPage} />
+      <Stack.Screen name="Meow" component={Meow} />
+    </Stack.Navigator>
+  );
+};
+
+export default StackPage;
