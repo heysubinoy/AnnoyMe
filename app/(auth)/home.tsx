@@ -1,8 +1,9 @@
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, ScrollView, Button } from "react-native";
 import React from "react";
 import { useUser } from "@clerk/clerk-expo";
 import { withTheme } from "react-native-paper";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import { Card, Text, Divider } from "react-native-paper";
 import { Drawer } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
@@ -12,8 +13,7 @@ import { getHeaderTitle } from "@react-navigation/elements";
 const Home = ({ theme, navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const { user } = useUser();
-
-  console.log(navigation);
+  const numberOfCards = 10;
   const handleButtonClick = () => {
     // Navigate to the new screent
     navigation.navigate("Meow");
@@ -27,9 +27,10 @@ const Home = ({ theme, navigation }) => {
         backgroundColor: theme.colors.background,
       }}
     >
-      <Appbar.Header>
+      <Appbar.Header >
         <Appbar.Content title="AnnoyMe" />
       </Appbar.Header>
+      <ScrollView>
       <Searchbar
         placeholder="Search"
         onChangeText={setSearchQuery}
@@ -39,11 +40,29 @@ const Home = ({ theme, navigation }) => {
 
       <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
       <Divider />
-      <Divider />
-      <Text>Here are some things you can do:</Text>
 
-      {/* Button to navigate to a new screen */}
-      <Button title="Go to New Screen" onPress={handleButtonClick} />
+      <Text>Here are some things you can do:</Text>
+        <Card onPress={handleButtonClick}>
+          <Card.Title
+            title="Card Title"
+            subtitle="Card Subtitle"
+            left={(props) => <Avatar.Icon {...props} icon="folder" />}
+          />
+        </Card>
+        <Divider />
+        {Array.from({ length: numberOfCards }, (_, index) => (
+          <React.Fragment key={index}>
+            <Card onPress={handleButtonClick}>
+              <Card.Title
+                title="Card Title"
+                subtitle="Card Subtitle"
+                left={(props) => <Avatar.Icon {...props} icon="folder" />}
+              />
+            </Card>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </ScrollView>
     </View>
   );
 };
