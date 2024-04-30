@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
+import { CommonActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text, BottomNavigation } from "react-native-paper";
 
 import Meow from "./meow";
 import Profile from "./profile";
@@ -28,35 +30,71 @@ const TabsPage = ({ navigation, theme }) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarHideOnKeyboard: true,
         headerShown: false,
-        tabBarStyle: {
-          height: 70,
-          borderWidth: 1,
-          borderTopEndRadius: 20,
-          borderTopStartRadius: 20,
-          borderColor: "#000",
-          borderEndWidth: 2,
-          borderStartWidth: 2,
-          borderTopWidth: 2,
-          borderBottomWidth: 2,
-
-          opacity: 0.9,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "bold",
-          marginBottom: 5,
-        },
       }}
+      tabBar={({ navigation, state, descriptors, insets }) => (
+        <BottomNavigation.Bar
+          navigationState={state}
+          safeAreaInsets={insets}
+          onTabPress={({ route, preventDefault }) => {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+              canPreventDefault: true,
+            });
+
+            if (event.defaultPrevented) {
+              preventDefault();
+            } else {
+              navigation.dispatch({
+                ...CommonActions.navigate(route.name, route.params),
+                target: state.key,
+              });
+            }
+          }}
+          renderIcon={({ route, focused, color }) => {
+            const { options } = descriptors[route.key];
+            if (options.tabBarIcon) {
+              return options.tabBarIcon({ focused, color, size: 24 });
+            }
+
+            return null;
+          }}
+          getLabelText={({ route }) => {
+            const { options } = descriptors[route.key];
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.title;
+
+            return label;
+          }}
+        />
+      )}
     >
       <Tab.Screen
         name="home"
         component={Home}
         options={{
+          headerTitle: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="chatbubble" size={size} color={color} />
           ),
+          tabBarLabel: "Home",
+        }}
+      />
+      <Tab.Screen
+        name="meow"
+        component={Meow}
+        options={{
+          headerTitle: "My Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-circle-outline" size={size} color={color} />
+          ),
+          tabBarLabel: "My Profile",
+          headerRight: () => <LogoutButton />,
         }}
       />
       <Tab.Screen
@@ -66,21 +104,9 @@ const TabsPage = ({ navigation, theme }) => {
           headerTitle: "Profile",
 
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
-          tabBarLabel: "My Profile",
-          headerRight: () => <LogoutButton />,
-        }}
-      />
-      <Tab.Screen
-        name="meow"
-        component={Meow}
-        options={{
-          headerTitle: "My Profile",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
-          tabBarLabel: "My Profile",
+          tabBarLabel: "Settings",
           headerRight: () => <LogoutButton />,
         }}
       />

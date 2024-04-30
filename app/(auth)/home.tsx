@@ -3,7 +3,7 @@ import React from "react";
 import { useUser } from "@clerk/clerk-expo";
 import { withTheme } from "react-native-paper";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
-import { Card, Text } from "react-native-paper";
+import { Card, Text, Divider } from "react-native-paper";
 import { Drawer } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
 import { Appbar } from "react-native-paper";
@@ -28,7 +28,7 @@ const Home = ({ theme, navigation }) => {
       }}
     >
       <Appbar.Header>
-        <Appbar.Content title="My awesome app" />
+        <Appbar.Content title="AnnoyMe" />
       </Appbar.Header>
       <Searchbar
         placeholder="Search"
@@ -37,19 +37,10 @@ const Home = ({ theme, navigation }) => {
         style={{ margin: 10 }}
       />
 
-      <Card style={styles.container}>
-        <Card.Content>
-          <Text variant="titleLarge">Card title</Text>
-          <Text variant="bodyMedium">Card content</Text>
-        </Card.Content>
-      </Card>
-      <Card style={styles.container}>
-        <Card.Content>
-          <Text variant="titleLarge">Card title</Text>
-          <Text variant="bodyMedium">Card content</Text>
-        </Card.Content>
-      </Card>
       <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+      <Divider />
+      <Divider />
+      <Text>Here are some things you can do:</Text>
 
       {/* Button to navigate to a new screen */}
       <Button title="Go to New Screen" onPress={handleButtonClick} />
