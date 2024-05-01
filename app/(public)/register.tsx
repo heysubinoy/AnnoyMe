@@ -1,10 +1,21 @@
-import { Button, TextInput, View, StyleSheet } from "react-native";
+import {
+  Button,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import { TextInput, withTheme } from "react-native-paper";
 import { useSignUp } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
+import LoginSVG from "../../public/imgg.svg";
+import SignInWithOAuth from "../components/SignInWithOAuth";
 
-const Register = () => {
+const Register = ({ theme }) => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [emailAddress, setEmailAddress] = useState("");
@@ -65,33 +76,129 @@ const Register = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{ ...styles.container, backgroundColor: theme.colors.background }}
+    >
       <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
       <Spinner visible={loading} />
 
       {!pendingVerification && (
-        <>
-          <TextInput
-            autoCapitalize="none"
-            placeholder="simon@galaxies.dev"
-            value={emailAddress}
-            onChangeText={setEmailAddress}
-            style={styles.inputField}
-          />
-          <TextInput
-            placeholder="password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.inputField}
-          />
+        <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ alignItems: "center" }}>
+              <LoginSVG
+                height={250}
+                width={250}
+                style={{
+                  transform: [{ rotate: "-5deg" }],
+                  backgroundColor: theme.colors.background,
+                }}
+                fill={"#ffffff"}
+              />
+            </View>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "500",
+                color: theme.colors.primary,
+                marginBottom: 30,
+              }}
+            >
+              Register
+            </Text>
 
-          <Button
-            onPress={onSignUpPress}
-            title="Sign up"
-            color={"#6c47ff"}
-          ></Button>
-        </>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                marginBottom: 30,
+              }}
+            >
+              <SignInWithOAuth />
+            </View>
+
+            <Text
+              style={{
+                textAlign: "center",
+                color: theme.colors.secondary,
+                marginBottom: 30,
+              }}
+            >
+              Or, register with email ...
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginBottom: 10,
+              }}
+            >
+              <TextInput
+                placeholder={"Email"}
+                keyboardType={"email-address"}
+                style={{ flex: 1, paddingVertical: 0 }}
+                left={<TextInput.Icon icon="email" />}
+                onChangeText={setEmailAddress}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+
+                marginBottom: 10,
+              }}
+            >
+              <TextInput
+                onChangeText={setPassword}
+                placeholder={"Password"}
+                style={{ flex: 1, paddingVertical: 0 }}
+                secureTextEntry={true}
+                left={<TextInput.Icon icon="eye" />}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={onSignUpPress}
+              style={{
+                backgroundColor: theme.colors.primary,
+                padding: 20,
+                borderRadius: 10,
+                marginTop: 15,
+                marginBottom: 30,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "700",
+                  fontSize: 16,
+                  color: theme.colors.background,
+                }}
+              >
+                {"Register"}
+              </Text>
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginBottom: 30,
+              }}
+            >
+              <Text style={{ color: theme.colors.secondary }}>
+                Already registered?
+              </Text>
+              <Link href="/login" asChild>
+                <TouchableOpacity>
+                  <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
+                    {" "}
+                    Login
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
       )}
 
       {pendingVerification && (
@@ -100,15 +207,30 @@ const Register = () => {
             <TextInput
               value={code}
               placeholder="Code..."
-              style={styles.inputField}
               onChangeText={setCode}
             />
           </View>
-          <Button
+          <TouchableOpacity
             onPress={onPressVerify}
-            title="Verify Email"
-            color={"#6c47ff"}
-          ></Button>
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 20,
+              borderRadius: 10,
+              marginTop: 15,
+              marginBottom: 30,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "700",
+                fontSize: 16,
+                color: theme.colors.background,
+              }}
+            >
+              {"Verify"}
+            </Text>
+          </TouchableOpacity>
         </>
       )}
     </View>
@@ -136,4 +258,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default withTheme(Register);

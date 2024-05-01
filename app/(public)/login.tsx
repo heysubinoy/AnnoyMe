@@ -115,8 +115,7 @@ const Login = ({ navigation, theme }) => {
             </TouchableOpacity>
           </Link>
         </View>
-        {/* 
-        <CustomButton label={"Login"} onPress={() => {}} /> */}
+
         <TouchableOpacity
           onPress={onSignInPress}
           style={{
