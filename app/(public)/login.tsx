@@ -36,7 +36,31 @@ const Login = ({ navigation, theme }) => {
       setLoading(false);
     }
   };
-
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: theme.colors.background,
+    },
+    inputContainer: {
+      borderRadius: 10,
+      height: 60,
+      overflow: "hidden",
+      marginTop: 10,
+    },
+    inputField: {
+      borderRadius: 0,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      height: 62,
+      overflow: "hidden",
+    },
+    button: {
+      margin: 8,
+      alignItems: "center",
+    },
+  });
   return (
     <SafeAreaView
       style={{
@@ -54,8 +78,8 @@ const Login = ({ navigation, theme }) => {
         <Spinner visible={loading} />
         <View style={{ alignItems: "center" }}>
           <LoginSVG
-            height={300}
-            width={300}
+            height={200}
+            width={200}
             style={{
               transform: [{ rotate: "-5deg" }],
               backgroundColor: theme.colors.background,
@@ -77,21 +101,20 @@ const Login = ({ navigation, theme }) => {
 
         <View
           style={{
-            flexDirection: "row",
-
-            marginBottom: 10,
+            ...styles.inputContainer,
           }}
         >
           <TextInput
             placeholder={"Email"}
             keyboardType={"email-address"}
-            style={{ flex: 1, paddingVertical: 0 }}
+            style={{ ...styles.inputField, flex: 1, paddingVertical: 0 }}
             left={<TextInput.Icon icon="email" />}
             onChangeText={setEmailAddress}
           />
         </View>
         <View
           style={{
+            ...styles.inputContainer,
             flexDirection: "row",
 
             marginBottom: 10,
@@ -100,7 +123,7 @@ const Login = ({ navigation, theme }) => {
           <TextInput
             onChangeText={setPassword}
             placeholder={"Password"}
-            style={{ flex: 1, paddingVertical: 0 }}
+            style={{ ...styles.inputField, flex: 1, paddingVertical: 0 }}
             secureTextEntry={true}
             left={<TextInput.Icon icon="eye" />}
           />

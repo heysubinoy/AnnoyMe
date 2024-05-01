@@ -74,7 +74,31 @@ const Register = ({ theme }) => {
       setLoading(false);
     }
   };
-
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: theme.colors.background,
+    },
+    inputContainer: {
+      borderRadius: 10,
+      height: 60,
+      overflow: "hidden",
+      marginTop: 10,
+    },
+    inputField: {
+      borderRadius: 0,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      height: 62,
+      overflow: "hidden",
+    },
+    button: {
+      margin: 8,
+      alignItems: "center",
+    },
+  });
   return (
     <View
       style={{ ...styles.container, backgroundColor: theme.colors.background }}
@@ -130,20 +154,21 @@ const Register = ({ theme }) => {
 
             <View
               style={{
+                ...styles.inputContainer,
                 flexDirection: "row",
-                marginBottom: 10,
               }}
             >
               <TextInput
                 placeholder={"Email"}
                 keyboardType={"email-address"}
-                style={{ flex: 1, paddingVertical: 0 }}
+                style={{ ...styles.inputField, flex: 1, paddingVertical: 0 }}
                 left={<TextInput.Icon icon="email" />}
                 onChangeText={setEmailAddress}
               />
             </View>
             <View
               style={{
+                ...styles.inputContainer,
                 flexDirection: "row",
 
                 marginBottom: 10,
@@ -152,7 +177,7 @@ const Register = ({ theme }) => {
               <TextInput
                 onChangeText={setPassword}
                 placeholder={"Password"}
-                style={{ flex: 1, paddingVertical: 0 }}
+                style={{ ...styles.inputField, flex: 1, paddingVertical: 0 }}
                 secureTextEntry={true}
                 left={<TextInput.Icon icon="eye" />}
               />
@@ -236,26 +261,5 @@ const Register = ({ theme }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-  },
-  inputField: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#6c47ff",
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-  },
-  button: {
-    margin: 8,
-    alignItems: "center",
-  },
-});
 
 export default withTheme(Register);

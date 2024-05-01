@@ -2,7 +2,13 @@ import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
 import { PaperProvider, MD3DarkTheme } from "react-native-paper";
 import InitialLayout from "./initialLayout";
-
+const navTheme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    background: "transparent",
+  },
+};
 const CLERK_PUBLISHABLE_KEY =
   "pk_test_ZGFybGluZy1wb2xsaXdvZy02MC5jbGVyay5hY2NvdW50cy5kZXYk";
 

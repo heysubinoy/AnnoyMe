@@ -1,20 +1,45 @@
-import { View, StyleSheet, TextInput, Button } from 'react-native';
-import React, { useState } from 'react';
-import { Stack } from 'expo-router';
-import { useSignIn } from '@clerk/clerk-expo';
+import { View, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
+import { TextInput, withTheme } from "react-native-paper";
+import React, { useState } from "react";
+import { Stack } from "expo-router";
+import { useSignIn } from "@clerk/clerk-expo";
 
-const PwReset = () => {
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+const PwReset = ({ theme }) => {
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
   const [successfulCreation, setSuccessfulCreation] = useState(false);
   const { signIn, setActive } = useSignIn();
-
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: theme.colors.background,
+    },
+    inputContainer: {
+      borderRadius: 10,
+      height: 60,
+      overflow: "hidden",
+      marginTop: 10,
+    },
+    inputField: {
+      borderRadius: 0,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      height: 62,
+      overflow: "hidden",
+    },
+    button: {
+      margin: 8,
+      alignItems: "center",
+    },
+  });
   // Request a passowrd reset code by email
   const onRequestReset = async () => {
     try {
       await signIn.create({
-        strategy: 'reset_password_email_code',
+        strategy: "reset_password_email_code",
         identifier: emailAddress,
       });
       setSuccessfulCreation(true);
@@ -27,12 +52,12 @@ const PwReset = () => {
   const onReset = async () => {
     try {
       const result = await signIn.attemptFirstFactor({
-        strategy: 'reset_password_email_code',
+        strategy: "reset_password_email_code",
         code,
         password,
       });
       console.log(result);
-      alert('Password reset successfully');
+      alert("Password reset successfully");
 
       // Set the user session active, which will log in the user automatically
       await setActive({ session: result.createdSessionId });
@@ -47,44 +72,107 @@ const PwReset = () => {
 
       {!successfulCreation && (
         <>
-          <TextInput autoCapitalize="none" placeholder="simon@galaxies.dev" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} />
-
-          <Button onPress={onRequestReset} title="Send Reset Email" color={'#6c47ff'}></Button>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 35,
+              marginBottom: 20,
+              color: theme.colors.primary,
+            }}
+          >
+            Reset Password
+          </Text>
+          <View style={{ ...styles.inputContainer }}>
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Your Email"
+              value={emailAddress}
+              onChangeText={setEmailAddress}
+              style={styles.inputField}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={onRequestReset}
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 20,
+              borderRadius: 10,
+              marginTop: 15,
+              marginBottom: 30,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "700",
+                fontSize: 16,
+                color: theme.colors.background,
+              }}
+            >
+              {"Reset"}
+            </Text>
+          </TouchableOpacity>
         </>
       )}
 
       {successfulCreation && (
         <>
           <View>
-            <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
-            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 35,
+                marginBottom: 20,
+                color: theme.colors.primary,
+              }}
+            >
+              New Password
+            </Text>
+            <View style={{ ...styles.inputContainer }}>
+              <TextInput
+                keyboardType="number-pad"
+                placeholder="Code"
+                value={code}
+                onChangeText={setCode}
+                style={styles.inputField}
+              />
+            </View>
+            <View style={{ ...styles.inputContainer }}>
+              <TextInput
+                placeholder="New password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.inputField}
+              />
+            </View>
           </View>
-          <Button onPress={onReset} title="Set new Password" color={'#6c47ff'}></Button>
+
+          <TouchableOpacity
+            onPress={onReset}
+            style={{
+              backgroundColor: theme.colors.primary,
+              padding: 20,
+              borderRadius: 10,
+              marginTop: 15,
+              marginBottom: 30,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "700",
+                fontSize: 16,
+                color: theme.colors.background,
+              }}
+            >
+              {"Confirm"}
+            </Text>
+          </TouchableOpacity>
         </>
       )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  inputField: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#6c47ff',
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  button: {
-    margin: 8,
-    alignItems: 'center',
-  },
-});
-
-export default PwReset;
+export default withTheme(PwReset);

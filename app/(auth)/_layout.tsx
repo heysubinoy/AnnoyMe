@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { CommonActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,6 +12,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 import Home from "./home";
 import { withTheme } from "react-native-paper";
+
 export const LogoutButton = () => {
   const { signOut } = useAuth();
 
@@ -114,13 +115,22 @@ const TabsPage = ({ navigation, theme }) => {
   );
 };
 
-const StackPage = () => {
+const StackPage = ({ theme }) => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animationTypeForReplace: "pop",
+        cardStyle: {
+          backgroundColor: theme.colors.primary,
+        },
+        animationEnabled: true,
+      }}
+    >
       <Stack.Screen name="Home" component={TabsPage} />
       <Stack.Screen name="Meow" component={Meow} />
     </Stack.Navigator>
   );
 };
 
-export default StackPage;
+export default withTheme(StackPage);
