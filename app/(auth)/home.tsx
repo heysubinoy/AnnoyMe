@@ -13,6 +13,7 @@ import { getHeaderTitle } from "@react-navigation/elements";
 const Home = ({ theme, navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const { user } = useUser();
+  console.log(user.id);
   const numberOfCards = 10;
   const handleButtonClick = () => {
     // Navigate to the new screent
@@ -27,21 +28,21 @@ const Home = ({ theme, navigation }) => {
         backgroundColor: theme.colors.background,
       }}
     >
-      <Appbar.Header >
+      <Appbar.Header>
         <Appbar.Content title="AnnoyMe" />
       </Appbar.Header>
       <ScrollView>
-      <Searchbar
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={{ margin: 10 }}
-      />
+        <Searchbar
+          placeholder="Search"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          style={{ margin: 10 }}
+        />
 
-      <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
-      <Divider />
+        <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+        <Divider />
 
-      <Text>Here are some things you can do:</Text>
+        <Text>Here are some things you can do:</Text>
         <Card onPress={handleButtonClick}>
           <Card.Title
             title="Card Title"

@@ -1,22 +1,41 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, FlatList, Button, StyleSheet, Text } from "react-native";
 import { Appbar } from "react-native-paper";
 import { TextInput } from "react-native-paper";
 import { Platform } from "react-native";
-
+import database from "../../firebaseConfig";
+import { useUser } from "@clerk/clerk-expo";
+import { ref, set, push, serverTimestamp, onValue } from "firebase/database";
+import { Message } from "../types/MessageTypes";
+import { GiftedChat } from "react-native-gifted-chat";
 const Meow = () => {
-  const [messages, setMessages] = useState([]);
+  const { user } = useUser();
+
   const [newMessage, setNewMessage] = useState("");
   const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return; // Prevent sending empty messages
+  const chatId = "chat1"; // For simplicity, we are using a hardcoded chatId
+  const messageRef = ref(database, `chats/${chatId}/allnew`);
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    onValue(messageRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const messages = Object.values(data);
+        const messagesExceptLast = messages;
+        setMessages(messagesExceptLast);
+      }
+    });
+  }, []);
 
-    const updatedMessages = [
-      ...messages,
-      { text: newMessage, timestamp: new Date() },
-    ];
-    setMessages(updatedMessages);
-    setNewMessage("");
+  const onSend = (messages = []) => {
+    messages.forEach((message) => {
+      // Send the message to the backend
+      push(messageRef, message);
+      console.log("Message sent", message);
+    });
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
   };
 
   return (
@@ -26,24 +45,22 @@ const Meow = () => {
         <Appbar.Action icon="magnify" onPress={() => {}} />
         <Appbar.Action icon={MORE_ICON} onPress={() => {}} />
       </Appbar.Header>
-      <FlatList
-        data={messages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.messageContainer}>
-            <Text style={styles.messageText}>{item.text}</Text>
-            <Text style={styles.timestamp}>
-              {item.timestamp.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </Text>
-          </View>
-        )}
-        inverted // to display messages from bottom to top
+      <GiftedChat
+        messages={messages}
+        //showAvatarForEveryMessage={true}
+        //showUserAvatar={true}
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        onSend={(messages) => onSend(messages)}
+        user={{
+          _id: user.id,
+          name: user.fullName,
+          avatar: user.profileImageUrl,
+        }}
+        alwaysShowSend
+        scrollToBottom
       />
 
-      <TextInput
+      {/* <TextInput
         multiline
         mode="flat"
         style={styles.input}
@@ -53,7 +70,7 @@ const Meow = () => {
         value={newMessage}
         onChangeText={setNewMessage}
         right={<TextInput.Icon icon="send" onPress={handleSendMessage} />}
-      />
+      /> */}
     </View>
   );
 };

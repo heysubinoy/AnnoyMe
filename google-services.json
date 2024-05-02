@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685329768652",
+    "project_id": "annoyme-6fd45",
+    "storage_bucket": "annoyme-6fd45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685329768652:android:e5d262a6f441ab4534a269",
+        "android_client_info": {
+          "package_name": "com.madcat.anoyme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn8vQu-eCCfOrfurSC6M7vqlZZsJfmvhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
