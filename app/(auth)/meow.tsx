@@ -28,7 +28,7 @@ const Meow = ({ theme }) => {
   const [newMessage, setNewMessage] = useState("");
   const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
   const chatId = "chat1"; // For simplicity, we are using a hardcoded chatId
-  const messageRef = ref(database, `chats/${chatId}/987654325`);
+  const messageRef = ref(database, `messages/${chatId}/messages`);
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     onChildAdded(messageRef, (data) => {

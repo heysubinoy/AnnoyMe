@@ -12,7 +12,6 @@ import LoginSVG from "../../public/imgg.svg";
 import { withTheme } from "react-native-paper";
 const Login = ({ navigation, theme }) => {
   const { signIn, setActive, isLoaded } = useSignIn();
-
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
