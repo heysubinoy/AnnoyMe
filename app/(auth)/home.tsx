@@ -92,33 +92,6 @@ const Home = ({ theme, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 10,
-    marginBottom: 5,
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-    padding: 10,
-  },
-  top: {
-    flex: 0.3,
-    backgroundColor: "grey",
-    borderWidth: 5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  middle: {
-    flex: 0.3,
-    backgroundColor: "beige",
-    borderWidth: 5,
-  },
-  bottom: {
-    flex: 0.3,
-    backgroundColor: "pink",
-    borderWidth: 5,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-});
+
 
 export default withTheme(Home);
